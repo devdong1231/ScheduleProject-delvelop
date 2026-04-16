@@ -3,7 +3,6 @@ package com.scheduleprojectdevelop.controller;
 import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
