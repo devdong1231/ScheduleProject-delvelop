@@ -21,8 +21,7 @@ public class User extends BaseEntity {
     @Column(nullable = false)
     private String email;
 
-    public User(Long userId, String userName, String email) {
-        this.userId = userId;
+    public User(String userName, String email) {
         this.userName = userName;
         this.email = email;
     }

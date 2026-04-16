@@ -348,7 +348,6 @@ DELETE /api/schedules/1
 
 <br>
 
-
 ## 🔹 Response
 
 #### ✅ 성공 - 204 No Content
@@ -365,6 +364,116 @@ DELETE /api/schedules/1
 
 <details>
 <summary>유저 CRUD</summary>
+
+## 유저 생성 API
+
+<details>
+<summary>유저 생성 API</summary>
+
+## 🔹 기본 정보
+
+- **Method** : `POST`
+- **URL** : `/users`
+- **설명** : 새로운 유저를 생성합니다.
+
+## 🔹 Request
+
+### Headers
+
+```text
+Content-Type: application/json
+```
+
+<br>
+
+### Body
+
+```json
+{
+  "userName": "김유하",
+  "email": "devdong1231@gmail.com"
+}
+```
+
+| 필드명      | 타입     | 필수 | 설명  |
+|----------|--------|----|-----|
+| userName | String | O  | 유저명 |
+| email    | String | O  | 이메일 |
+
+<br>
+
+## 🔹 Response
+
+#### ✅ 성공 - 201 Created
+
+```json
+{
+  "userId": 1,
+  "userName": "김유하",
+  "email": "devdong1231@gmail.com",
+  "createdAt": "2026-04-18T16:30.96822",
+  "updatedAt": "2026-04-18T16:30.96822"
+}
+```
+
+| 필드명       | 타입            | 필수 | 설명     |
+|-----------|---------------|----|--------|
+| userId    | Long          | O  | 고유 식별자 |
+| userName  | String        | O  | 유저명    |
+| email     | String        | O  | 이메일    |
+| createdAt | LocalDateTime | O  | 생성한 날짜 |
+| updatedAt | LocalDateTime | O  | 수정한 날짜 |
+
+<br>
+
+#### ❌ 실패 - 400 Bad Request
+
+```json
+{
+  "message": "필수값이 입력되지 않았습니다."
+}
+```
+
+</details>
+
+## 유저 단건 조회 API
+
+<details>
+<summary>유저 단건 조회 API</summary>
+
+
+
+</details>
+
+## 유저 전체 조회 API
+
+<details>
+
+<summary>유저 전체 조회 API</summary>
+
+
+
+</details>
+
+## 유저 수정 API
+
+<details>
+
+<summary>유저 수정 API</summary>
+
+
+
+</details>
+
+## 유저 삭제 API
+
+<details>
+
+<summary>유저 삭제 API</summary>
+
+
+
+</details>
 
 </details>
 
