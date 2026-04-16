@@ -1,8 +1,7 @@
 package com.scheduleprojectdevelop.service;
 
-import com.scheduleprojectdevelop.dto.userDto.CreateUserRequest;
-import com.scheduleprojectdevelop.dto.userDto.CreateUserResponse;
-import com.scheduleprojectdevelop.dto.userDto.GetOneUserResponse;
+import com.scheduleprojectdevelop.dto.scheduleDto.UpdateScheduleResponse;
+import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.entity.User;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +61,23 @@ public class UserService {
         }
 
         return results;
+    }
+
+    @Transactional
+    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new IllegalStateException("adfs") // todo - 404
+        );
+
+        user.update(request.getUserName(), request.getEmail());
+
+        return new UpdateUserResponse(
+                user.getUserId(),
+                user.getUserName(),
+                user.getEmail(),
+                user.getCreatedAt(),
+                user.getUpdatedAt()
+        );
     }
 
 }

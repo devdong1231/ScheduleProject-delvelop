@@ -581,7 +581,6 @@ GET /users/1
 | 필드명      | 타입     | 필수 | 설명  |
 |----------|--------|----|-----|
 | userName | String | O  | 유저명 |
-| email    | String | O  | 이메일 |
 
 ### 요청 예시
 
@@ -603,19 +602,15 @@ Content-Type: application/json
 
 ```json
 {
-  "userId": 1,
   "userName": "김유하",
-  "email": "devdong1231@gmail.com",
-  "createdAt": "2026-04-18T16:30.96822",
-  "updatedAt": "2026-04-18T16:30.96822"
+  "email": "devdong1231@gmail.com"
 }
 ```
 
-| 필드명      | 타입     | 필수 | 설명     |
-|----------|--------|----|--------|
-| title    | String | O  | 할일 제목  |
-| contents | String | O  | 할일 내용  |
-| author   | String | O  | 작성 유저명 |
+| 필드명      | 타입     | 필수 | 설명  |
+|----------|--------|----|-----|
+| userName | String | O  | 유저명 |
+| email    | String | O  | 이메일 |
 
 <br>
 
@@ -625,10 +620,9 @@ Content-Type: application/json
 
 ```json
 {
-  "scheduleId": 1,
-  "title": "점심 시간",
-  "contents": "오후 1시 반 부터 오후 2시 반 까지",
-  "author": "김유하",
+  "userId": 1,
+  "userName": "김유하",
+  "email": "devdong1231@gmail.com",
   "createdAt": "2026-04-18T16:30.96822",
   "updatedAt": "2026-04-18T16:30.96822"
 }
@@ -666,7 +660,37 @@ Content-Type: application/json
 
 <summary>유저 삭제 API</summary>
 
+## 🔹 기본 정보
 
+- **Method** : `DELETE`
+- **URL** : `/user/{userId}`
+- **설명** : 특정 유저를 삭제합니다.
+
+<br>
+
+### 🔹 Path Variable
+
+| 변수명    | 타입   | 설명     |
+|--------|------|--------|
+| userId | Long | 고유 식별자 |
+
+### 요청 예시
+
+```
+DELETE /api/schedules/1
+```
+
+<br>
+
+## 🔹 Response
+
+#### ✅ 성공 - 204 No Content
+
+#### ❌ 실패 - 404 Not Found
+
+```
+해당 일정을 찾을 수 없습니다!
+```
 
 </details>
 
