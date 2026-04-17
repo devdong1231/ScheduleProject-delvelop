@@ -850,6 +850,8 @@ DELETE /users/1
 
 </details>
 
+## 댓글 API
+
 <details>
 <summary>댓글 CRUD</summary>
 
