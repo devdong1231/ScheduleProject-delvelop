@@ -16,20 +16,6 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
 
-    @Transactional
-    public CreateUserResponse createUser(CreateUserRequest request) {
-        //todo - 400
-        User user = new User(request.getUserName(), request.getEmail());
-        userRepository.save(user);
-        return new CreateUserResponse(
-                user.getUserId(),
-                user.getUserName(),
-                user.getEmail(),
-                user.getCreatedAt(),
-                user.getUpdatedAt()
-        );
-    }
-
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(

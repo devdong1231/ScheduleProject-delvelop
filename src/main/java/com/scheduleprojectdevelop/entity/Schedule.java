@@ -1,6 +1,7 @@
 package com.scheduleprojectdevelop.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,26 +15,29 @@ public class Schedule extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long scheduleId;
 
+    @NotBlank
     @Column(nullable = false)
     private String title;
 
+    @NotBlank
     @Column(nullable = false)
     private String content;
 
+    @NotBlank
     @Column(nullable = false)
-    private String author;
+    private Long userId;
 
-    public Schedule(String title, String content, String author) {
+    public Schedule(String title, String content, Long userId) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.userId = userId;
     }
 
-    public void update(String title, String content, String author) {
+    public void update(String title, String content, Long userId) {
         this.title = title;
         this.content = content;
-        this.author = author;
+        this.userId = userId;
     }
 }

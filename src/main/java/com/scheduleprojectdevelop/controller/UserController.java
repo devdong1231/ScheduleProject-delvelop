@@ -16,33 +16,26 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    // todo - AuthController로 이전
-    @PostMapping
-    public ResponseEntity<CreateUserResponse> createUser(CreateUserRequest request) {
-        CreateUserResponse result = userService.createUser(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
-    }
-
     @GetMapping("/{userId}")
-    public ResponseEntity<GetOneUserResponse> getOneUser(@PathVariable Long userId) {
+    public ResponseEntity<GetOneUserResponse> getOneUser(@PathVariable Long userId){
         GetOneUserResponse result = userService.getOneUser(userId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @GetMapping
-    public ResponseEntity<List<GetOneUserResponse>> getAllUser() {
+    public ResponseEntity<List<GetOneUserResponse>> getAllUser(){
         List<GetOneUserResponse> results = userService.getAllUser();
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId, UpdateUserRequest request) {
+    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId, UpdateUserRequest request){
         UpdateUserResponse result = userService.updateUser(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @DeleteMapping("/{userId}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long userId){
         userService.deleteUser(userId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

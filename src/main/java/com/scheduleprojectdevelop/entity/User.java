@@ -1,6 +1,7 @@
 package com.scheduleprojectdevelop.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,11 +16,19 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
+    @NotBlank
     @Column(nullable = false)
     private String userName;
 
+    @NotBlank
     @Column(nullable = false)
+    @Email(message = "올바른 이메일 형식이 아닙니다.")
     private String email;
+
+    @NotBlank
+    @Column(nullable = false)
+    @Pattern(regexp = ".{8,}")
+    private String password;
 
     public User(String userName, String email) {
         this.userName = userName;

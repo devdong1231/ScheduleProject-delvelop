@@ -18,14 +18,14 @@ public class ScheduleService {
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
         // todo - 400 처리
-        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), request.getAuthor());
+        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), request.getUserId());
         scheduleRepository.save(schedule);
 
         return new CreateScheduleResponse(
-                schedule.getId(),
+                schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getAuthor(),
+                schedule.getUserId(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt());
     }
@@ -38,10 +38,10 @@ public class ScheduleService {
         // todo - 404 처리
 
         return new GetOneScheduleResponse(
-                schedule.getId(),
+                schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getAuthor(),
+                schedule.getUserId(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );
@@ -53,10 +53,10 @@ public class ScheduleService {
         List<GetOneScheduleResponse> results = new ArrayList<>();
         for (Schedule schedule : schedules) {
             results.add(new GetOneScheduleResponse(
-                    schedule.getId(),
+                    schedule.getScheduleId(),
                     schedule.getTitle(),
                     schedule.getContent(),
-                    schedule.getAuthor(),
+                    schedule.getUserId(),
                     schedule.getCreatedAt(),
                     schedule.getUpdatedAt()
             ));
@@ -70,13 +70,13 @@ public class ScheduleService {
                 () -> new IllegalStateException("asdf") // todo - 400 처리
         );
 
-        schedule.update(request.getTitle(), request.getContents(), request.getAuthor());
+        schedule.update(request.getTitle(), request.getContents(), request.getUserId());
 
         return new UpdateScheduleResponse(
-                schedule.getId(),
+                schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getAuthor(),
+                schedule.getUserId(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );
