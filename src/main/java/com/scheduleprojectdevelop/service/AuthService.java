@@ -21,7 +21,7 @@ public class AuthService {
         if (userRepository.existsByEmail(request.getEmail())) {
             throw new UserNotFoundException("이미 존재하는 사용자입니다.");
         }
-        User user = new User(request.getUserName(), request.getEmail());
+        User user = new User(request.getUserName(), request.getEmail(), request.getPassword());
 
         return userRepository.save(user);
     }
