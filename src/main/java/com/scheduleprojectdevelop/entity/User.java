@@ -27,7 +27,6 @@ public class User extends BaseEntity {
 
     @NotBlank
     @Column(nullable = false)
-    @Pattern(regexp = ".{8,}")
     private String password;
 
     public User(String userName, String email) {
