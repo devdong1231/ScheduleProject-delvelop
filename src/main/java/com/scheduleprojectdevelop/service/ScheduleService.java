@@ -19,19 +19,8 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
 
     @Transactional
-    public CreateScheduleResponse createSchedule(CreateScheduleRequest request) {
-        if (request.getTitle() == null || request.getTitle().isBlank()) {
-            throw new BlankArgumentException("제목은 필수입니다.");
-        }
-
-        if (request.getContents() == null || request.getContents().isBlank()) {
-            throw new BlankArgumentException("내용은 필수입니다.");
-        }
-
-        if (request.getUserId() == null) {
-            throw new BlankArgumentException("작성자 ID는 필수입니다.");
-        }
-        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), request.getUserId());
+    public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
+        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), userId);
         scheduleRepository.save(schedule);
 
         return new CreateScheduleResponse(
@@ -78,12 +67,12 @@ public class ScheduleService {
     }
 
     @Transactional
-    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request) {
+    public UpdateScheduleResponse updateSchedule(Long scheduleId, UpdateScheduleRequest request, Long userId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
                 () -> new ScheduleNotFoundException("존재하지 않는 일정입니다.")
         );
 
-        schedule.update(request.getTitle(), request.getContents(), request.getUserId());
+        schedule.update(request.getTitle(), request.getContents(), userId);
 
         return new UpdateScheduleResponse(
                 schedule.getScheduleId(),
