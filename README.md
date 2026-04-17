@@ -668,7 +668,7 @@ Content-Type: application/json
 
 <br>
 
-### 🔹 Path Variable
+## 🔹 Path Variable
 
 | 변수명    | 타입   | 설명     |
 |--------|------|--------|
