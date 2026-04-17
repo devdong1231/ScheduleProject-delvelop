@@ -1,6 +1,5 @@
 package com.scheduleprojectdevelop.controller;
 
-import com.scheduleprojectdevelop.dto.scheduleDto.UpdateScheduleResponse;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.service.UserService;
 import lombok.RequiredArgsConstructor;

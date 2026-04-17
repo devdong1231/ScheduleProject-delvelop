@@ -2,9 +2,12 @@ package com.scheduleprojectdevelop.service;
 
 import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.entity.Schedule;
+import com.scheduleprojectdevelop.entity.User;
+import com.scheduleprojectdevelop.exception.ArgumentMismatchException;
 import com.scheduleprojectdevelop.exception.BlankArgumentException;
 import com.scheduleprojectdevelop.exception.ScheduleNotFoundException;
 import com.scheduleprojectdevelop.repository.ScheduleRepository;
+import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -17,17 +20,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {
-        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), userId);
+        User user = userRepository.findById(userId).orElseThrow(
+                () -> new ArgumentMismatchException("어쩌고~")
+        );
+        Schedule schedule = new Schedule(request.getTitle(), request.getContents(), user);
         scheduleRepository.save(schedule);
 
         return new CreateScheduleResponse(
                 schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getUserId(),
+                schedule.getUser(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt());
     }
@@ -43,7 +50,7 @@ public class ScheduleService {
                 schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getUserId(),
+                schedule.getUser(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );
@@ -58,7 +65,7 @@ public class ScheduleService {
                     schedule.getScheduleId(),
                     schedule.getTitle(),
                     schedule.getContent(),
-                    schedule.getUserId(),
+                    schedule.getUser(),
                     schedule.getCreatedAt(),
                     schedule.getUpdatedAt()
             ));
@@ -72,13 +79,13 @@ public class ScheduleService {
                 () -> new ScheduleNotFoundException("존재하지 않는 일정입니다.")
         );
 
-        schedule.update(request.getTitle(), request.getContents(), userId);
+        schedule.update(request.getTitle(), request.getContents());
 
         return new UpdateScheduleResponse(
                 schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getUserId(),
+                schedule.getUser(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );

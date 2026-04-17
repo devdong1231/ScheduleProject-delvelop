@@ -26,18 +26,18 @@ public class Schedule extends BaseEntity {
     private String content;
 
     @NotBlank
-    @Column(nullable = false)
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    public Schedule(String title, String content, Long userId) {
+    public Schedule(String title, String content, User user) {
         this.title = title;
         this.content = content;
-        this.userId = userId;
+        this.user = user;
     }
 
-    public void update(String title, String content, Long userId) {
+    public void update(String title, String content) {
         this.title = title;
         this.content = content;
-        this.userId = userId;
     }
 }
