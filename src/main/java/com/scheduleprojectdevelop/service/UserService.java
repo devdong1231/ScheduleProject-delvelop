@@ -1,8 +1,8 @@
 package com.scheduleprojectdevelop.service;
 
-import com.scheduleprojectdevelop.dto.scheduleDto.UpdateScheduleResponse;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.entity.User;
+import com.scheduleprojectdevelop.exception.UserNotFoundException;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("adsf") // todo - 400
+                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
         );
 
         return new GetOneUserResponse(
@@ -52,7 +52,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("adfs") // todo - 404
+                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
         );
 
         user.update(request.getUserName(), request.getEmail());
@@ -69,7 +69,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new IllegalStateException("asdf") // todo - 404
+                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
         );
         userRepository.delete(user);
     }
