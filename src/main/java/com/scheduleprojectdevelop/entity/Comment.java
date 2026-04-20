@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
-@Setter
 @Entity(name = "comments")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment extends BaseEntity {
@@ -22,12 +21,10 @@ public class Comment extends BaseEntity {
     @Column(nullable = false)
     private String comments;
 
-    @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @NotBlank
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
@@ -38,7 +35,7 @@ public class Comment extends BaseEntity {
         this.schedule = schedule;
     }
 
-    public void update() {
+    public void update(String comments) {
         this.comments = comments;
     }
 }
