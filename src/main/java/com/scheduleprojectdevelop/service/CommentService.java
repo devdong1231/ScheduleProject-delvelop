@@ -1,9 +1,7 @@
 package com.scheduleprojectdevelop.service;
 
 
-import com.scheduleprojectdevelop.dto.commentDto.CreateCommentRequest;
-import com.scheduleprojectdevelop.dto.commentDto.CreateCommentResponse;
-import com.scheduleprojectdevelop.dto.commentDto.GetOneCommentResponse;
+import com.scheduleprojectdevelop.dto.commentDto.*;
 import com.scheduleprojectdevelop.entity.Comment;
 import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
@@ -59,5 +57,12 @@ public class CommentService {
         }
 
         return results;
+    }
+
+    @Transactional
+    public UpdateCommentResponse updateComment(Long scheduleId, Long commentId, UpdateCommentRequest request) {
+        Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId);
+        comment.update(request.getComments());
+        return new UpdateCommentResponse(comment.getComments(), comment.getCommentId(), comment.getUser().getUserName(), comment.getCreatedAt(), comment.getUpdatedAt());
     }
 }
