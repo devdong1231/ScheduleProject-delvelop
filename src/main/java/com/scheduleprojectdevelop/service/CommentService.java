@@ -65,4 +65,10 @@ public class CommentService {
         comment.update(request.getComments());
         return new UpdateCommentResponse(comment.getComments(), comment.getCommentId(), comment.getUser().getUserName(), comment.getCreatedAt(), comment.getUpdatedAt());
     }
+
+    @Transactional
+    public void deleteComment(Long scheduleId, Long commentId) {
+        Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId);
+        commentRepository.delete(comment);
+    }
 }

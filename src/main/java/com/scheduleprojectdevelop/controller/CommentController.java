@@ -46,4 +46,11 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
+    @DeleteMapping("/schedules/{scheduleId}/comments/{commentId}")
+    public ResponseEntity<Void> deleteComment(@PathVariable Long scheduleId,
+                                              @PathVariable Long commentId) {
+        commentService.deleteComment(scheduleId, commentId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
 }
