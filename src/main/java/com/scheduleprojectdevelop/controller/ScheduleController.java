@@ -5,6 +5,7 @@ import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.service.ScheduleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -30,8 +31,8 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<GetOneScheduleResponse>> getAllSchedule() {
-        List<GetOneScheduleResponse> results = scheduleService.getAllSchedule();
+    public ResponseEntity<Page<GetSchedulePageResponse>> getAllSchedule(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        Page<GetSchedulePageResponse> results = scheduleService.getAllSchedule(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
