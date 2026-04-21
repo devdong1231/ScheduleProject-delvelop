@@ -4,12 +4,14 @@ import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
 import com.scheduleprojectdevelop.exception.ArgumentMismatchException;
-import com.scheduleprojectdevelop.exception.BlankArgumentException;
 import com.scheduleprojectdevelop.exception.ScheduleNotFoundException;
 import com.scheduleprojectdevelop.repository.ScheduleRepository;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,20 +59,14 @@ public class ScheduleService {
     }
 
     @Transactional(readOnly = true)
-    public List<GetOneScheduleResponse> getAllSchedule() {
-        List<Schedule> schedules = scheduleRepository.findAll();
-        List<GetOneScheduleResponse> results = new ArrayList<>();
-        for (Schedule schedule : schedules) {
-            results.add(new GetOneScheduleResponse(
-                    schedule.getScheduleId(),
-                    schedule.getTitle(),
-                    schedule.getContent(),
-                    schedule.getUser(),
-                    schedule.getCreatedAt(),
-                    schedule.getUpdatedAt()
-            ));
-        }
-        return results;
+    public Page<GetSchedulePageResponse> getAllSchedule(int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by("updatedAt").descending()
+        );
+
+        return scheduleRepository.findAllWithPage(pageable);
     }
 
     @Transactional

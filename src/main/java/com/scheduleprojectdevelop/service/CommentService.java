@@ -5,12 +5,8 @@ import com.scheduleprojectdevelop.dto.commentDto.*;
 import com.scheduleprojectdevelop.entity.Comment;
 import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
-import com.scheduleprojectdevelop.exception.CommentNotFoundException;
-import com.scheduleprojectdevelop.exception.ScheduleNotFoundException;
-import com.scheduleprojectdevelop.exception.UserNotFoundException;
-import com.scheduleprojectdevelop.repository.CommentRepository;
-import com.scheduleprojectdevelop.repository.ScheduleRepository;
-import com.scheduleprojectdevelop.repository.UserRepository;
+import com.scheduleprojectdevelop.exception.*;
+import com.scheduleprojectdevelop.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,7 +40,11 @@ public class CommentService {
         Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId).orElseThrow(
                 () -> new CommentNotFoundException("댓글을 찾을 수 없습니다.")
         );
-        return new GetOneCommentResponse(comment.getComments(), comment.getCommentId(), comment.getUser().getUserName(), comment.getCreatedAt(), comment.getUpdatedAt());
+        return new GetOneCommentResponse(comment.getComments(),
+                comment.getCommentId(),
+                comment.getUser().getUserName(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt());
     }
 
     @Transactional(readOnly = true)
@@ -60,7 +60,6 @@ public class CommentService {
                     comment.getUpdatedAt()
             ));
         }
-
         return results;
     }
 

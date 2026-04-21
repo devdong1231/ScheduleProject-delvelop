@@ -12,11 +12,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/schedules/{scheduleId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
     private CommentService commentService;
 
-    @PostMapping("/schedules/{scheduleId}/comments")
+    @PostMapping
     public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId,
                                                                @SessionAttribute(name = "loginUser") SessionUser sessionUser,
                                                                @RequestBody CreateCommentRequest request) {
@@ -25,20 +26,20 @@ public class CommentController {
     }
 
 
-    @GetMapping("/schedules/{scheduleId}/comments/{commentId}")
+    @GetMapping("/{commentId}")
     public ResponseEntity<GetOneCommentResponse> getOneComment(@PathVariable Long scheduleId,
                                                                @PathVariable Long commentId) {
         GetOneCommentResponse result = commentService.getOneComment(scheduleId, commentId);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @GetMapping("/schedules/{scheduleId}/comments")
+    @GetMapping
     public ResponseEntity<List<GetOneCommentResponse>> getAllComment(@PathVariable Long scheduleId) {
         List<GetOneCommentResponse> results = commentService.getAllComment(scheduleId);
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
-    @PatchMapping("/schedules/{scheduleId}/comments/{commentId}")
+    @PatchMapping("/{commentId}")
     public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable Long scheduleId,
                                                                @PathVariable Long commentId,
                                                                @RequestBody UpdateCommentRequest request) {
@@ -46,7 +47,7 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    @DeleteMapping("/schedules/{scheduleId}/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long scheduleId,
                                               @PathVariable Long commentId) {
         commentService.deleteComment(scheduleId, commentId);
