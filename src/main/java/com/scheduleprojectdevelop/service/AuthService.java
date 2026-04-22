@@ -21,7 +21,7 @@ public class AuthService {
     @Transactional
     public User register(RegisterRequest request) {
         if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserNotFoundException("이미 존재하는 사용자입니다.");
+            throw new UserNotFoundException();
         }
         String encoded = passwordEncoder.encode(request.getPassword());
         User user = new User(request.getUserName(), request.getEmail(), encoded);

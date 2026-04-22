@@ -1,5 +1,6 @@
 package com.scheduleprojectdevelop.controller;
 
+import com.scheduleprojectdevelop.dto.AuthDto.SessionUser;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,8 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId, UpdateUserRequest request){
+    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId, UpdateUserRequest request,
+                                                         @SessionAttribute(name="loginUser")SessionUser sessionUser){
         UpdateUserResponse result = userService.updateUser(userId, request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }

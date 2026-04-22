@@ -1,6 +1,5 @@
 package com.scheduleprojectdevelop.dto.scheduleDto;
 
-import com.scheduleprojectdevelop.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;

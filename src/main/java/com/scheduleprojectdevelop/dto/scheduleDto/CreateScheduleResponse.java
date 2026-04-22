@@ -10,15 +10,15 @@ public class CreateScheduleResponse {
     private final Long scheduleId;
     private final String title;
     private final String contents;
-    private final User user;
+    private final Long userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public CreateScheduleResponse(Long scheduleId, String title, String contents, User user, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public CreateScheduleResponse(Long scheduleId, String title, String contents, Long userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.scheduleId = scheduleId;
         this.title = title;
         this.contents = contents;
-        this.user = user;
+        this.userId = userId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

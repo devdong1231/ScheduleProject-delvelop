@@ -4,7 +4,7 @@ import org.springframework.http.HttpStatus;
 
 public class ScheduleNotFoundException extends ServiceException{
 
-    public ScheduleNotFoundException(String message) {
-        super(HttpStatus.NOT_FOUND, message);
+    public ScheduleNotFoundException() {
+        super(HttpStatus.NOT_FOUND, "존재하지 않는 일정입니다.");
     }
 }

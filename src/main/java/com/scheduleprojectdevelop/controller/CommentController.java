@@ -42,15 +42,17 @@ public class CommentController {
     @PatchMapping("/{commentId}")
     public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable Long scheduleId,
                                                                @PathVariable Long commentId,
-                                                               @RequestBody UpdateCommentRequest request) {
-        UpdateCommentResponse result = commentService.updateComment(scheduleId, commentId, request);
+                                                               @RequestBody UpdateCommentRequest request,
+                                                               @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
+        UpdateCommentResponse result = commentService.updateComment(scheduleId, commentId, sessionUser.getUserId(), request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     @DeleteMapping("/{commentId}")
     public ResponseEntity<Void> deleteComment(@PathVariable Long scheduleId,
-                                              @PathVariable Long commentId) {
-        commentService.deleteComment(scheduleId, commentId);
+                                              @PathVariable Long commentId,
+                                              @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
+        commentService.deleteComment(scheduleId, commentId, sessionUser.getUserId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

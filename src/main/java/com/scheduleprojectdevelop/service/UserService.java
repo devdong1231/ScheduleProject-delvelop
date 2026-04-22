@@ -19,7 +19,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
+                UserNotFoundException::new
         );
 
         return new GetOneUserResponse(
@@ -52,7 +52,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
+                UserNotFoundException::new
         );
 
         user.update(request.getUserName(), request.getEmail());
@@ -69,7 +69,7 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId){
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
+                UserNotFoundException::new
         );
         userRepository.delete(user);
     }
