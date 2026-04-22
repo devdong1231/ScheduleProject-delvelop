@@ -15,7 +15,7 @@ import java.util.List;
 @RequestMapping("/schedules/{scheduleId}/comments")
 @RequiredArgsConstructor
 public class CommentController {
-    private CommentService commentService;
+    private final CommentService commentService;
 
     @PostMapping
     public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId,

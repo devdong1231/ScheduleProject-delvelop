@@ -50,8 +50,9 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
+    public UpdateUserResponse updateUser(Long userId, Long sessionUserId, UpdateUserRequest request) {
         User user = getUser(userId);
+        validator.validateAuthor(userId, sessionUserId);
         validator.validateByEmail(request.getEmail());
 
         user.update(request.getUserName(), request.getEmail());

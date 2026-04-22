@@ -6,6 +6,7 @@ import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
 import com.scheduleprojectdevelop.exception.ScheduleNotFoundException;
 import com.scheduleprojectdevelop.exception.UserNotFoundException;
+import com.scheduleprojectdevelop.repository.CommentRepository;
 import com.scheduleprojectdevelop.repository.ScheduleRepository;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
+    private final CommentRepository commentRepository;
     private final Validator authValidator;
 
     @Transactional
@@ -87,6 +89,7 @@ public class ScheduleService {
         Schedule schedule = getSchedule(scheduleId);
         authValidator.validateAuthor(schedule.getUser().getUserId(), userId);
 
+        commentRepository.deleteBySchedule(schedule);
         scheduleRepository.delete(schedule);
     }
 

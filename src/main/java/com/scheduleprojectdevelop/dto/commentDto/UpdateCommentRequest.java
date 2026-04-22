@@ -6,7 +6,7 @@ import lombok.Getter;
 
 @Getter
 public class UpdateCommentRequest {
-    @Size(max = 50, message = "50자 이내로 입력해주세요.")
+    @Size(max = 50, message = "내용은 50자 이내로 입력해주세요.")
     @NotBlank(message = "내용은 필수 입니다.")
     private String comments;
 }

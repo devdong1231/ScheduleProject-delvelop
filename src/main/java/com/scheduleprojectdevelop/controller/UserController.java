@@ -3,6 +3,7 @@ package com.scheduleprojectdevelop.controller;
 import com.scheduleprojectdevelop.dto.AuthDto.SessionUser;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,10 @@ public class UserController {
     }
 
     @PatchMapping("/{userId}")
-    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId, UpdateUserRequest request,
+    public ResponseEntity<UpdateUserResponse> updateUser(@PathVariable Long userId,
+                                                         @Valid @RequestBody UpdateUserRequest request,
                                                          @SessionAttribute(name="loginUser")SessionUser sessionUser){
-        UpdateUserResponse result = userService.updateUser(userId, request);
+        UpdateUserResponse result = userService.updateUser(userId, sessionUser.getUserId(), request);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
