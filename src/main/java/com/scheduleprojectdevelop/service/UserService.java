@@ -2,6 +2,7 @@ package com.scheduleprojectdevelop.service;
 
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.entity.User;
+import com.scheduleprojectdevelop.exception.UserAlreadyExistsException;
 import com.scheduleprojectdevelop.exception.UserNotFoundException;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +19,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                UserNotFoundException::new
-        );
+        User user = getUser(userId);
 
         return new GetOneUserResponse(
                 user.getUserId(),
@@ -51,9 +50,10 @@ public class UserService {
 
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
-                UserNotFoundException::new
-        );
+        User user = getUser(userId);
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new UserAlreadyExistsException();
+        }
 
         user.update(request.getUserName(), request.getEmail());
 
@@ -67,11 +67,17 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId){
+    public void deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
                 UserNotFoundException::new
         );
         userRepository.delete(user);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                UserNotFoundException::new
+        );
     }
 
 }

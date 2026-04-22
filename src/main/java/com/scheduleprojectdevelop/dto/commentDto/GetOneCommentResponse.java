@@ -9,14 +9,14 @@ public class GetOneCommentResponse {
 
     private final String comments;
     private final Long commentId;
-    private final String userName;
+    private final Long userId;
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
-    public GetOneCommentResponse(String comments, Long commentId, String userName, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public GetOneCommentResponse(String comments, Long commentId, Long userId, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.comments = comments;
         this.commentId = commentId;
-        this.userName = userName;
+        this.userId = userId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }

@@ -1,10 +1,9 @@
 package com.scheduleprojectdevelop.service;
 
-import com.scheduleprojectdevelop.AuthValidator;
+import com.scheduleprojectdevelop.validator.AuthValidator;
 import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
-import com.scheduleprojectdevelop.exception.ArgumentMismatchException;
 import com.scheduleprojectdevelop.exception.ScheduleNotFoundException;
 import com.scheduleprojectdevelop.exception.UserNotFoundException;
 import com.scheduleprojectdevelop.repository.ScheduleRepository;
@@ -49,7 +48,7 @@ public class ScheduleService {
                 schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getUser(),
+                schedule.getUser().getUserId(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );
@@ -77,7 +76,7 @@ public class ScheduleService {
                 schedule.getScheduleId(),
                 schedule.getTitle(),
                 schedule.getContent(),
-                schedule.getUser(),
+                schedule.getUser().getUserId(),
                 schedule.getCreatedAt(),
                 schedule.getUpdatedAt()
         );
