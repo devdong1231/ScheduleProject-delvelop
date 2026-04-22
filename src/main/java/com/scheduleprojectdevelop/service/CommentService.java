@@ -1,7 +1,7 @@
 package com.scheduleprojectdevelop.service;
 
 
-import com.scheduleprojectdevelop.validator.AuthValidator;
+import com.scheduleprojectdevelop.Validator;
 import com.scheduleprojectdevelop.dto.commentDto.*;
 import com.scheduleprojectdevelop.entity.*;
 import com.scheduleprojectdevelop.exception.*;
@@ -18,7 +18,7 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
     private final ScheduleRepository scheduleRepository;
-    private final AuthValidator authValidator;
+    private final Validator validator;
 
     @Transactional
     public CreateCommentResponse create(Long scheduleId, Long userId, CreateCommentRequest request) {
@@ -61,7 +61,7 @@ public class CommentService {
     @Transactional
     public UpdateCommentResponse updateComment(Long scheduleId, Long commentId, Long userId, UpdateCommentRequest request) {
         Comment comment = findComment(scheduleId, commentId);
-        authValidator.validateAuthor(comment.getUser().getUserId(), userId);
+        validator.validateAuthor(comment.getUser().getUserId(), userId);
 
         comment.update(request.getComments());
         return new UpdateCommentResponse(comment.getComments(),
@@ -75,7 +75,7 @@ public class CommentService {
     @Transactional
     public void deleteComment(Long scheduleId, Long commentId, Long userId) {
         Comment comment = findComment(scheduleId, commentId);
-        authValidator.validateAuthor(comment.getUser().getUserId(), userId);
+        validator.validateAuthor(comment.getUser().getUserId(), userId);
 
         commentRepository.delete(comment);
     }

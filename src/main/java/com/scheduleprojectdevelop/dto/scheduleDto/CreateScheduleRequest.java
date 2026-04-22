@@ -7,11 +7,11 @@ import lombok.Getter;
 @Getter
 public class CreateScheduleRequest {
 
-    @Size(max = 20, message = "20자 이내로 입력해주세요.")
+    @Size(max = 20, message = "제목은 20자 이내로 입력해주세요.")
     @NotBlank(message = "제목은 필수 입니다.")
     private String title;
 
-    @Size(max = 50, message = "50자 이내로 입력해주세요.")
+    @Size(max = 50, message = "내용은 50자 이내로 입력해주세요.")
     @NotBlank(message = "내용은 필수 입니다.")
     private String contents;
 }

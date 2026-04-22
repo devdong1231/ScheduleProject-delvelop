@@ -1,6 +1,6 @@
 package com.scheduleprojectdevelop.service;
 
-import com.scheduleprojectdevelop.validator.AuthValidator;
+import com.scheduleprojectdevelop.Validator;
 import com.scheduleprojectdevelop.dto.scheduleDto.*;
 import com.scheduleprojectdevelop.entity.Schedule;
 import com.scheduleprojectdevelop.entity.User;
@@ -21,7 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
-    private final AuthValidator authValidator;
+    private final Validator authValidator;
 
     @Transactional
     public CreateScheduleResponse createSchedule(CreateScheduleRequest request, Long userId) {

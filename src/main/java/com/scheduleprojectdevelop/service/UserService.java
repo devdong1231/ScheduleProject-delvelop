@@ -1,8 +1,8 @@
 package com.scheduleprojectdevelop.service;
 
+import com.scheduleprojectdevelop.Validator;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.entity.User;
-import com.scheduleprojectdevelop.exception.UserAlreadyExistsException;
 import com.scheduleprojectdevelop.exception.UserNotFoundException;
 import com.scheduleprojectdevelop.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final Validator validator;
 
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
@@ -51,9 +52,7 @@ public class UserService {
     @Transactional
     public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
         User user = getUser(userId);
-        if (userRepository.existsByEmail(request.getEmail())) {
-            throw new UserAlreadyExistsException();
-        }
+        validator.validateByEmail(request.getEmail());
 
         user.update(request.getUserName(), request.getEmail());
 

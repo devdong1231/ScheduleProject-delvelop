@@ -72,11 +72,12 @@ Content-Type: application/json
 |--------|------|----|-----------|
 | userId | Long | O  | 유저 고유 식별자 |
 
-#### ❌ 실패 - 400 Bad Request
+#### ❌ 실패 - 409 Conflict
 
 ```json
 {
-  "message": "이미 존재하는 유저입니다."
+  "status": 409,
+  "message": "이미 존재하는 이메일입니다."
 }
 ```
 
@@ -135,6 +136,15 @@ Content-Type: application/json
 | userId | Long   | O  | 유저 고유 식별자 |
 | email  | String | O  | 이메일       |
 
+#### ❌ 실패 - 401 Unauthorized
+
+```json
+{
+  "status": 401,
+  "message": "이메일 또는 비밀번호가 일치하지 않습니다."
+}
+```
+
 </details>
 
 ## 로그아웃 API
@@ -159,14 +169,6 @@ Cookie: JSESSIONID={sessionId}
 ## 🔹 Response
 
 #### ✅ 성공 - 204 No Content
-
-#### ❌ 실패 - 401 Unauthorized
-
-```json
-{
-  "message": "로그인된 사용자가 없습니다."
-}
-```
 
 </details>
 
@@ -244,9 +246,45 @@ Cookie: JSESSIONID={sessionId}
 
 #### ❌ 실패 - 400 Bad Request
 
+<details>
+<summary>응답 예시</summary>
+
 ```json
 {
-  "message": "필수값이 입력되지 않았습니다."
+  "status": 400,
+  "message": "제목은 20자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "제목은 필수 입니다."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "내용은 필수 입니다."
+}
+```
+
+</details>
+
+#### ❌ 실패 - 404 Not Found
+
+```json
+{
+  "status": 404,
+  "message": "존재하지 않는 유저입니다."
 }
 ```
 
@@ -309,7 +347,8 @@ GET /schedules/1
 
 ```json
 {
-  "message": "해당 일정을 조회할 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
 }
 ```
 
@@ -452,17 +491,45 @@ Content-Type: application/json
 
 #### ❌ 실패 - 400 Bad Request
 
+<details>
+<summary>응답 예시</summary>
+
 ```json
 {
-  "message": "필수값을 입력해주세요."
+  "status": 400,
+  "message": "제목은 20자 이내로 입력해주세요."
 }
 ```
+
+```json
+{
+  "status": 404,
+  "message": "제목은 필수 입니다."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "내용은 필수 입니다."
+}
+```
+
+</details>
 
 #### ❌ 실패 - 404 Not Found
 
 ```json
 {
-  "message": "일정을 찾을 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
 }
 ```
 
