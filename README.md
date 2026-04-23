@@ -1,5 +1,34 @@
 # 일정 관리 앱 - Develop
 
+## 기본 설명
+
+<details>
+<summary>기본 설명</summary>
+
+### 기본 설명
+
+Spring Boot를 활용한 일정 관리 시스템입니다.
+
+```
+src/main/java/com/scheduleprojectdevelop
+├─config
+├─controller
+├─dto
+├─entity
+├─exception
+├─repository
+└─service
+```
+
+| 이름       | 역할                            |
+|----------|-------------------------------|
+| Auth     | 회원가입, 로그인, 로그아웃을 담당합니다.       |
+| User     | 유저 조회(단건/전체)/수정/삭제를 담당합니다.    |
+| Schedule | 일정 생성/조회(단건/전체)/수정/삭제를 담당합니다. |
+| Comment  | 댓글 생성/조회(단건/전체)/수정/삭제를 담당합니다. |
+
+</details>
+
 ## ERD
 
 <details>
