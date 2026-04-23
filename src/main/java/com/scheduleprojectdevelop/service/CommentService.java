@@ -1,33 +1,32 @@
 package com.scheduleprojectdevelop.service;
 
 
+import com.scheduleprojectdevelop.Validator;
 import com.scheduleprojectdevelop.dto.commentDto.*;
-import com.scheduleprojectdevelop.entity.Comment;
-import com.scheduleprojectdevelop.entity.Schedule;
-import com.scheduleprojectdevelop.entity.User;
+import com.scheduleprojectdevelop.entity.*;
 import com.scheduleprojectdevelop.exception.*;
 import com.scheduleprojectdevelop.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    private CommentRepository commentRepository;
-    private UserRepository userRepository;
-    private ScheduleRepository scheduleRepository;
+    private final CommentRepository commentRepository;
+    private final UserRepository userRepository;
+    private final ScheduleRepository scheduleRepository;
+    private final Validator validator;
 
     @Transactional
     public CreateCommentResponse create(Long scheduleId, Long userId, CreateCommentRequest request) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("유저를 찾을 수 없습니다.")
+                UserNotFoundException::new
         );
         Schedule schedule = scheduleRepository.findById(scheduleId).orElseThrow(
-                () -> new ScheduleNotFoundException("일정을 찾을 수 없습니다.")
+                ScheduleNotFoundException::new
         );
 
         Comment comment = new Comment(user, schedule, request.getComments());
@@ -37,46 +36,54 @@ public class CommentService {
 
     @Transactional(readOnly = true)
     public GetOneCommentResponse getOneComment(Long scheduleId, Long commentId) {
-        Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId).orElseThrow(
-                () -> new CommentNotFoundException("댓글을 찾을 수 없습니다.")
-        );
+        Comment comment = findComment(scheduleId, commentId);
         return new GetOneCommentResponse(comment.getComments(),
                 comment.getCommentId(),
-                comment.getUser().getUserName(),
+                comment.getUser().getUserId(),
                 comment.getCreatedAt(),
                 comment.getUpdatedAt());
     }
 
     @Transactional(readOnly = true)
     public List<GetOneCommentResponse> getAllComment(Long scheduleId) {
-        List<Comment> comments = commentRepository.findAllBySchedule_ScheduleId(scheduleId);
-        List<GetOneCommentResponse> results = new ArrayList<>();
-        for (Comment comment : comments) {
-            results.add(new GetOneCommentResponse(
-                    comment.getComments(),
-                    comment.getCommentId(),
-                    comment.getUser().getUserName(),
-                    comment.getCreatedAt(),
-                    comment.getUpdatedAt()
-            ));
-        }
-        return results;
+        scheduleRepository.findById(scheduleId).orElseThrow(ScheduleNotFoundException::new);
+
+        return commentRepository.findAllBySchedule_ScheduleId(scheduleId).stream()
+                .map(comment -> new GetOneCommentResponse(
+                        comment.getComments(),
+                        comment.getCommentId(),
+                        comment.getUser().getUserId(),
+                        comment.getCreatedAt(),
+                        comment.getUpdatedAt()
+                )).toList();
     }
 
     @Transactional
-    public UpdateCommentResponse updateComment(Long scheduleId, Long commentId, UpdateCommentRequest request) {
-        Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId).orElseThrow(
-                () -> new CommentNotFoundException("댓글을 찾을 수 없습니다.")
-        );
+    public UpdateCommentResponse updateComment(Long scheduleId, Long commentId, Long userId, UpdateCommentRequest request) {
+        Comment comment = findComment(scheduleId, commentId);
+        validator.validateAuthor(comment.getUser().getUserId(), userId);
+
         comment.update(request.getComments());
-        return new UpdateCommentResponse(comment.getComments(), comment.getCommentId(), comment.getUser().getUserName(), comment.getCreatedAt(), comment.getUpdatedAt());
+        return new UpdateCommentResponse(comment.getComments(),
+                comment.getCommentId(),
+                comment.getUser().getUserId(),
+                comment.getCreatedAt(),
+                comment.getUpdatedAt()
+        );
     }
 
     @Transactional
-    public void deleteComment(Long scheduleId, Long commentId) {
-        Comment comment = commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId).orElseThrow(
-                () -> new CommentNotFoundException("댓글을 찾을 수 없습니다.")
-        );
+    public void deleteComment(Long scheduleId, Long commentId, Long userId) {
+        Comment comment = findComment(scheduleId, commentId);
+        validator.validateAuthor(comment.getUser().getUserId(), userId);
+
         commentRepository.delete(comment);
     }
+
+    private Comment findComment(Long scheduleId, Long commentId) {
+        return commentRepository.findBySchedule_ScheduleIdAndCommentId(scheduleId, commentId).orElseThrow(
+                CommentNotFoundException::new
+        );
+    }
+
 }

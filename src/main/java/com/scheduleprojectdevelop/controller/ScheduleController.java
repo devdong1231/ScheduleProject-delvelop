@@ -10,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/schedules")
 @RequiredArgsConstructor
@@ -45,8 +43,9 @@ public class ScheduleController {
     }
 
     @DeleteMapping("/{scheduleId}")
-    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId) {
-        scheduleService.deleteSchedule(scheduleId);
+    public ResponseEntity<Void> deleteSchedule(@PathVariable Long scheduleId,
+                                               @SessionAttribute(name = "loginUser") SessionUser sessionuser) {
+        scheduleService.deleteSchedule(scheduleId, sessionuser.getUserId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

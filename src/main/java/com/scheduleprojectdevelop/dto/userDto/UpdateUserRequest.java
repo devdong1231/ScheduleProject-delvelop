@@ -13,6 +13,6 @@ public class UpdateUserRequest {
     private String userName;
 
     @NotBlank
-    @Email
+    @Email(message = "이메일은 필수입니다.")
     private String email;
 }

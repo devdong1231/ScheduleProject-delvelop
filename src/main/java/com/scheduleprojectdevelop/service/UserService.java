@@ -1,5 +1,6 @@
 package com.scheduleprojectdevelop.service;
 
+import com.scheduleprojectdevelop.Validator;
 import com.scheduleprojectdevelop.dto.userDto.*;
 import com.scheduleprojectdevelop.entity.User;
 import com.scheduleprojectdevelop.exception.UserNotFoundException;
@@ -15,12 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class UserService {
     private final UserRepository userRepository;
+    private final Validator validator;
 
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
-        );
+        User user = getUser(userId);
 
         return new GetOneUserResponse(
                 user.getUserId(),
@@ -50,10 +50,10 @@ public class UserService {
     }
 
     @Transactional
-    public UpdateUserResponse updateUser(Long userId, UpdateUserRequest request) {
-        User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
-        );
+    public UpdateUserResponse updateUser(Long userId, Long sessionUserId, UpdateUserRequest request) {
+        User user = getUser(userId);
+        validator.validateAuthor(userId, sessionUserId);
+        validator.validateByEmail(request.getEmail());
 
         user.update(request.getUserName(), request.getEmail());
 
@@ -67,11 +67,17 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long userId){
+    public void deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 유저 입니다.")
+                UserNotFoundException::new
         );
         userRepository.delete(user);
+    }
+
+    private User getUser(Long userId) {
+        return userRepository.findById(userId).orElseThrow(
+                UserNotFoundException::new
+        );
     }
 
 }

@@ -1,5 +1,34 @@
 # 일정 관리 앱 - Develop
 
+## 기본 설명
+
+<details>
+<summary>기본 설명</summary>
+
+### 기본 설명
+
+Spring Boot를 활용한 일정 관리 시스템입니다.
+
+```
+src/main/java/com/scheduleprojectdevelop
+├─config
+├─controller
+├─dto
+├─entity
+├─exception
+├─repository
+└─service
+```
+
+| 이름       | 역할                            |
+|----------|-------------------------------|
+| Auth     | 회원가입, 로그인, 로그아웃을 담당합니다.       |
+| User     | 유저 조회(단건/전체)/수정/삭제를 담당합니다.    |
+| Schedule | 일정 생성/조회(단건/전체)/수정/삭제를 담당합니다. |
+| Comment  | 댓글 생성/조회(단건/전체)/수정/삭제를 담당합니다. |
+
+</details>
+
 ## ERD
 
 <details>
@@ -72,11 +101,12 @@ Content-Type: application/json
 |--------|------|----|-----------|
 | userId | Long | O  | 유저 고유 식별자 |
 
-#### ❌ 실패 - 400 Bad Request
+#### ❌ 실패 - 409 Conflict
 
 ```json
 {
-  "message": "이미 존재하는 유저입니다."
+  "status": 409,
+  "message": "이미 존재하는 이메일입니다."
 }
 ```
 
@@ -99,6 +129,7 @@ Content-Type: application/json
 
 ```
 Content-Type: application/json
+Set-Cookie: JSESSIONID={sessionId}
 ```
 
 <br>
@@ -135,6 +166,15 @@ Content-Type: application/json
 | userId | Long   | O  | 유저 고유 식별자 |
 | email  | String | O  | 이메일       |
 
+#### ❌ 실패 - 400 Bad Request
+
+```json
+{
+  "status": 400,
+  "message": "이메일 또는 비밀번호가 일치하지 않습니다."
+}
+```
+
 </details>
 
 ## 로그아웃 API
@@ -159,14 +199,6 @@ Cookie: JSESSIONID={sessionId}
 ## 🔹 Response
 
 #### ✅ 성공 - 204 No Content
-
-#### ❌ 실패 - 401 Unauthorized
-
-```json
-{
-  "message": "로그인된 사용자가 없습니다."
-}
-```
 
 </details>
 
@@ -244,9 +276,45 @@ Cookie: JSESSIONID={sessionId}
 
 #### ❌ 실패 - 400 Bad Request
 
+<details>
+<summary>응답 예시</summary>
+
 ```json
 {
-  "message": "필수값이 입력되지 않았습니다."
+  "status": 400,
+  "message": "제목은 20자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "제목은 필수 입니다."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "내용은 필수 입니다."
+}
+```
+
+</details>
+
+#### ❌ 실패 - 404 Not Found
+
+```json
+{
+  "status": 404,
+  "message": "존재하지 않는 유저입니다."
 }
 ```
 
@@ -309,7 +377,8 @@ GET /schedules/1
 
 ```json
 {
-  "message": "해당 일정을 조회할 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
 }
 ```
 
@@ -368,6 +437,7 @@ GET /schedules/1
 
 ```json
 {
+  "status": 500,
   "message": "서버 내부에서 오류가 발생했습니다."
 }
 ```
@@ -408,6 +478,7 @@ PATCH /schedules/1
 
 ```
 Content-Type: application/json
+Cookie: JSESSIONID={sessionId}
 ```
 
 ### Body
@@ -452,9 +523,45 @@ Content-Type: application/json
 
 #### ❌ 실패 - 400 Bad Request
 
+<details>
+<summary>응답 예시</summary>
+
 ```json
 {
-  "message": "필수값을 입력해주세요."
+  "status": 400,
+  "message": "제목은 20자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "제목은 필수 입니다."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "내용은 필수 입니다."
+}
+```
+
+</details>
+
+### ❌ 실패 - 403 Forbidden
+
+```json
+{
+  "status": 403,
+  "message": "권한이 없습니다."
 }
 ```
 
@@ -462,7 +569,8 @@ Content-Type: application/json
 
 ```json
 {
-  "message": "일정을 찾을 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
 }
 ```
 
@@ -496,14 +604,32 @@ DELETE /schedules/1
 
 <br>
 
+## 🔹 Request
+
+### Header
+
+```
+Cookie: JSESSIONID={sessionId}
+```
+
 ## 🔹 Response
 
 #### ✅ 성공 - 204 No Content
+
+### ❌ 실패 - 403 Forbidden
+
+```json
+{
+  "status": 403,
+  "message": "권한이 없습니다."
+}
+```
 
 #### ❌ 실패 - 404 Not Found
 
 ```json
 {
+  "status": 404,
   "message": "해당 일정을 찾을 수 없습니다"
 }
 ```
@@ -568,19 +694,12 @@ GET /users/1
 
 <br>
 
-#### ❌ 실패 - 400 Bad Request
-
-```json
-{
-  "message": "필수값이 입력되지 않았습니다."
-}
-```
-
 #### ❌ 실패 - 404 Not Found
 
 ```json
 {
-  "message": "해당 유저를 조회할 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 유저입니다."
 }
 ```
 
@@ -637,6 +756,7 @@ GET /users/1
 
 ```json
 {
+  "status": 500,
   "message": "서버 내부에서 오류가 발생했습니다."
 }
 ```
@@ -677,6 +797,7 @@ PATCH /users/1
 
 ```
 Content-Type: application/json
+Cookie: JSESSIONID={sessionId}
 ```
 
 ### Body
@@ -719,19 +840,25 @@ Content-Type: application/json
 
 #### ❌ 실패 - 400 Bad Request
 
-```json
-{
-  "message": "필수값을 입력해주세요."
-}
-```
-
-#### ❌ 실패 - 404 Not Found
+<details>
+<summary>응답 예시</summary>
 
 ```json
 {
-  "message": "해당 유저를 찾을 수 없습니다."
+  "status": 400,
+  "message": "이름은 한글 1~5자여야 합니다."
 }
 ```
+
+```json
+{
+  "status": 400,
+  "message": "이메일은 필수입니다."
+}
+```
+
+</details>
+
 
 </details>
 
@@ -771,7 +898,8 @@ DELETE /users/1
 
 ```json
 {
-  "message": "해당 유저를 찾을 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 유저입니다."
 }
 ```
 
@@ -812,13 +940,13 @@ Cookie: JSESSIONID={sessionId}
 
 ```json
 {
-  "comment": "점심 맛있겠네요"
+  "comments": "점심 맛있겠네요"
 }
 ```
 
-| 필드명     | 타입     | 필수 | 설명    |
-|---------|--------|----|-------|
-| comment | String | O  | 댓글 내용 |
+| 필드명      | 타입     | 필수 | 설명    |
+|----------|--------|----|-------|
+| comments | String | O  | 댓글 내용 |
 
 <br>
 
@@ -829,7 +957,7 @@ Cookie: JSESSIONID={sessionId}
 ```json
 {
   "commentId": 1,
-  "comment": "점심 맛있겠네요",
+  "comments": "점심 맛있겠네요",
   "createdAt": "2026-04-18T16:30.12345",
   "updatedAt": "2026-04-18T16:30.12345"
 }
@@ -838,7 +966,7 @@ Cookie: JSESSIONID={sessionId}
 | 필드명       | 타입            | 필수 | 설명        |
 |-----------|---------------|----|-----------|
 | commentId | Long          | O  | 댓글 고유 식별자 |
-| comment   | String        | O  | 댓글 내용     |
+| comments  | String        | O  | 댓글 내용     |
 | createdAt | LocalDateTime | O  | 생성한 날짜    |
 | updatedAt | LocalDateTime | O  | 수정한 날짜    |
 
@@ -846,9 +974,45 @@ Cookie: JSESSIONID={sessionId}
 
 #### ❌ 실패 - 400 Bad Request
 
+<details>
+<summary>응답 예시</summary>
+
+```json
+{
+  "status": 400,
+  "message": "내용은 필수 입니다."
+}
 ```
-필수 입력값이 입력되지 않았습니다.
+
+```json
+{
+  "status": 400,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
 ```
+
+</details>
+
+#### ❌ 실패 - 404 Not Found
+
+<details>
+<summary>응답 예시</summary>
+
+```json
+{
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
+}
+```
+
+```json
+{
+  "status": 404,
+  "message": "존재하지 않는 유저입니다."
+}
+```
+
+</details>
 
 </details>
 
@@ -875,14 +1039,14 @@ Cookie: JSESSIONID={sessionId}
 [
   {
     "commentId": 2,
-    "comment": "배고프다",
+    "comments": "배고프다",
     "userName": "김유하",
     "createdAt": "2026-04-08T08:40",
     "updatedAt": "2026-04-08T08:40"
   },
   {
     "commentId": 1,
-    "comment": "점심 맛있겠네요",
+    "comments": "점심 맛있겠네요",
     "userName": "김유하",
     "createdAt": "2026-04-08T08:40",
     "updatedAt": "2026-04-08T16:40"
@@ -893,15 +1057,18 @@ Cookie: JSESSIONID={sessionId}
 | 필드명       | 타입            | 필수 | 설명        |
 |-----------|---------------|----|-----------|
 | commentId | Long          | O  | 댓글 고유 식별자 |
-| comment   | String        | O  | 댓글 내용     |
+| comments  | String        | O  | 댓글 내용     |
 | userName  | String        | O  | 작성자명      |
 | createdAt | LocalDateTime | O  | 생성한 날짜    |
 | updatedAt | LocalDateTime | O  | 수정한 날짜    |
 
 ### ❌ 실패 - 500 Internal Server Error
 
-```
-서버 오류가 발생했습니다.
+```json
+{
+  "status": 500,
+  "message": "서버 오류가 발생했습니다."
+}
 ```
 
 </details>
@@ -947,13 +1114,13 @@ Cookie: JSESSIONID={sessionId}
 
 ```json
 {
-  "comment": "짱짱굿"
+  "comments": "짱짱굿"
 }
 ```
 
-| 필드명     | 타입     | 필수 | 설명    |
-|---------|--------|----|-------|
-| comment | String | O  | 댓글 내용 |
+| 필드명      | 타입     | 필수 | 설명    |
+|----------|--------|----|-------|
+| comments | String | O  | 댓글 내용 |
 
 <br>
 
@@ -964,7 +1131,7 @@ Cookie: JSESSIONID={sessionId}
 ```json
 {
   "commentId": 1,
-  "comment": "짱짱굿",
+  "comments": "짱짱굿",
   "userName": "김유하",
   "createdAt": "2026-04-18T16:30",
   "updatedAt": "2026-04-18T17:30"
@@ -974,16 +1141,47 @@ Cookie: JSESSIONID={sessionId}
 | 필드명       | 타입            | 필수 | 설명     |
 |-----------|---------------|----|--------|
 | commentId | Long          | O  | 고유 식별자 |
-| comment   | String        | O  | 댓글 내용  |
+| comments  | String        | O  | 댓글 내용  |
 | userName  | String        | O  | 작성자명   |
 | createdAt | LocalDateTime | O  | 생성한 날짜 |
 | updatedAt | LocalDateTime | O  | 수정한 날짜 |
+
+### ❌ 실패 - 400 Bad Request
+
+<details>
+<summary>응답 예시</summary>
+
+```json
+{
+  "status": 400,
+  "message": "내용은 50자 이내로 입력해주세요."
+}
+```
+
+```json
+{
+  "status": 400,
+  "message": "내용은 필수입니다."
+}
+```
+
+</details>
+
+### ❌ 실패 - 403 Forbidden
+
+```json
+{
+  "status": 403,
+  "message": "권한이 없습니다."
+}
+```
 
 ### ❌ 실패 - 404 Not Found
 
 ```json
 {
-  "message": "일정을 찾을 수 없습니다"
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
 }
 ```
 
@@ -1034,7 +1232,17 @@ Cookie: JSESSIONID={sessionId}
 
 ```json
 {
-  "message": "해당 일정을 찾을 수 없습니다."
+  "status": 404,
+  "message": "존재하지 않는 일정입니다."
+}
+```
+
+### ❌ 실패 - 403 Forbidden
+
+```json
+{
+  "status": 403,
+  "message": "권한이 없습니다."
 }
 ```
 
