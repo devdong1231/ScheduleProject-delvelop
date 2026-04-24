@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
 
+    // 인증과 관련된 것들만 모아둔 controller
+    // 회원가입, 로그인, 로그아웃 만을 다룸
+
     @PostMapping("/register")
     public ResponseEntity<RegisterResponse> register(@Valid @RequestBody RegisterRequest request) {
         RegisterResponse result = authService.register(request);

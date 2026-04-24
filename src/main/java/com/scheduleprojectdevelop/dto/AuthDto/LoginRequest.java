@@ -7,11 +7,11 @@ import lombok.Getter;
 
 @Getter
 public class LoginRequest {
-    @NotBlank
+    @NotBlank(message = "이메일은 필수 입력입니다.")
     @Email
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호는 필수 입력입니다.")
     @Size(min = 8)
     private String password;
 }

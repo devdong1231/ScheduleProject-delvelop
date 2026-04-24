@@ -18,6 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final Validator validator;
 
+
     @Transactional(readOnly = true)
     public GetOneUserResponse getOneUser(Long userId) {
         User user = getUser(userId);
