@@ -4,6 +4,7 @@ package com.scheduleprojectdevelop.controller;
 import com.scheduleprojectdevelop.dto.AuthDto.SessionUser;
 import com.scheduleprojectdevelop.dto.commentDto.*;
 import com.scheduleprojectdevelop.service.CommentService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class CommentController {
     @PostMapping
     public ResponseEntity<CreateCommentResponse> createComment(@PathVariable Long scheduleId,
                                                                @SessionAttribute(name = "loginUser") SessionUser sessionUser,
-                                                               @RequestBody CreateCommentRequest request) {
+                                                               @Valid @RequestBody CreateCommentRequest request) {
         CreateCommentResponse result = commentService.create(scheduleId, sessionUser.getUserId(), request);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -42,7 +43,7 @@ public class CommentController {
     @PatchMapping("/{commentId}")
     public ResponseEntity<UpdateCommentResponse> updateComment(@PathVariable Long scheduleId,
                                                                @PathVariable Long commentId,
-                                                               @RequestBody UpdateCommentRequest request,
+                                                               @Valid @RequestBody UpdateCommentRequest request,
                                                                @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
         UpdateCommentResponse result = commentService.updateComment(scheduleId, commentId, sessionUser.getUserId(), request);
         return ResponseEntity.status(HttpStatus.OK).body(result);

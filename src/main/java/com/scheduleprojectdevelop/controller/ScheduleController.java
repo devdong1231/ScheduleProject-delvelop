@@ -17,7 +17,8 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping
-    public ResponseEntity<CreateScheduleResponse> createSchedule(@Valid @RequestBody CreateScheduleRequest request, @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
+    public ResponseEntity<CreateScheduleResponse> createSchedule(@Valid @RequestBody CreateScheduleRequest request,
+                                                                 @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
         CreateScheduleResponse result = scheduleService.createSchedule(request, sessionUser.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
@@ -29,14 +30,15 @@ public class ScheduleController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<GetSchedulePageResponse>> getAllSchedule(@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+    public ResponseEntity<Page<GetSchedulePageResponse>> getAllSchedule(@RequestParam(defaultValue = "0") int page,
+                                                                        @RequestParam(defaultValue = "10") int size) {
         Page<GetSchedulePageResponse> results = scheduleService.getAllSchedule(page, size);
         return ResponseEntity.status(HttpStatus.OK).body(results);
     }
 
     @PatchMapping("/{scheduleId}")
     public ResponseEntity<UpdateScheduleResponse> updateSchedule(@PathVariable Long scheduleId,
-                                                                 @RequestBody UpdateScheduleRequest request,
+                                                                 @Valid @RequestBody UpdateScheduleRequest request,
                                                                  @SessionAttribute(name = "loginUser") SessionUser sessionUser) {
         UpdateScheduleResponse result = scheduleService.updateSchedule(scheduleId, request, sessionUser.getUserId());
         return ResponseEntity.status(HttpStatus.OK).body(result);

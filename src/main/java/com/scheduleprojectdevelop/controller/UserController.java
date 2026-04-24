@@ -17,6 +17,9 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
+    // 인증과 관련되지 않은 기능을 모아둔 controller
+    // 유저 조회(단건,전체), 정보 수정, 삭제
+
     @GetMapping("/{userId}")
     public ResponseEntity<GetOneUserResponse> getOneUser(@PathVariable Long userId){
         GetOneUserResponse result = userService.getOneUser(userId);

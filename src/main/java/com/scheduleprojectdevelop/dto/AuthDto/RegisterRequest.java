@@ -9,15 +9,15 @@ import lombok.Getter;
 @Getter
 public class RegisterRequest {
 
-    @NotBlank
-    @Pattern(regexp = "^[가-힣]{1,5}$", message = "이름은 한글 1~5자여야 합니다.")
+    @NotBlank(message = "이름은 한글 1~5자여야 합니다.")
+    @Pattern(regexp = "^[가-힣]{1,5}$")
     private String userName;
 
-    @NotBlank
-    @Email(message = "이메일은 필수 입력입니다.")
+    @NotBlank(message = "이메일은 필수 입력입니다.")
+    @Email
     private String email;
 
-    @NotBlank
-    @Size(min = 8, message = "비밀번호는 필수 입력입니다.")
+    @NotBlank(message = "비밀번호는 필수 입력입니다.")
+    @Size(min = 8)
     private String password;
 }
